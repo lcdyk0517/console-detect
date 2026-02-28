@@ -1,0 +1,6 @@
+# 编译产物
+console_detect
+*.o
+
+# 依赖目录
+deps/
