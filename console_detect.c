@@ -382,12 +382,14 @@ void print_usage(const char *program_name) {
     printf("  -t, --hotkey      仅输出热键类型\n");
     printf("  -o, --rotation    仅输出屏幕旋转角度\n");
     printf("  -l, --led         仅输出LED类型\n");
+    printf("  -b, --bootini     仅输出 boot.ini 检测的设备名称\n");
 }
 
 int main(int argc, char *argv[]) {
     DeviceInfo info;
     int output_format = 0;  /* 0: 普通格式, 1: JSON, 2: Shell */
     int single_output = 0;  /* 单项输出模式 */
+    char bootini_device[64] = "";
     
     /* 解析命令行参数 */
     for (int i = 1; i < argc; i++) {
@@ -410,6 +412,19 @@ int main(int argc, char *argv[]) {
             single_output = 5;
         } else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--led") == 0) {
             single_output = 6;
+        } else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--bootini") == 0) {
+            single_output = 7;
+        }
+    }
+    
+    /* 如果是 -b 选项，直接从 boot.ini 读取 */
+    if (single_output == 7) {
+        if (read_boot_ini(bootini_device, sizeof(bootini_device)) == 0) {
+            printf("%s\n", bootini_device);
+            return 0;
+        } else {
+            fprintf(stderr, "无法从 boot.ini 读取设备信息\n");
+            return 1;
         }
     }
     
