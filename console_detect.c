@@ -78,10 +78,11 @@ static DeviceConfig device_configs[] = {
     {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported"},
     {"u8",        "800p480","dual",   "happy5", 270,  "unsupported"},
     {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported"},
-    {"d007",      "480p",   "dual",   "select", 0,    "unsupported"},
+    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio"},
     {"r50s",      "854p480","dual",   "happy5", 270,  "unsupported"},
     {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported"},
     {"xf28",      "480p",   "single", "select", 90,   "ws2812"},
+    {"r33s",      "480p",   "none",   "select", 0,    "unsupported"},
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported"},
     {NULL, NULL, NULL, NULL, 0, NULL}
 };
@@ -105,6 +106,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-r36h-linux.dtb",         "r36h"},
     {"rk3326-r36splus-linux.dtb",     "r36splus"},
     {"rk3326-r46h-linux.dtb",         "r46h"},
+    {"rk3326-r33s-linux.dtb",         "r33s"},
     {"rk3326-r40xx-linux.dtb",        "r40xx"},
     {"rk3326-hg36-linux.dtb",         "hg36"},
     {"rk3326-rx6h-linux.dtb",         "rx6h"},

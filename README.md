@@ -171,11 +171,12 @@ echo "r36s" > /boot/.console
 | g350 | 640x480 | 双摇杆 | happy5 | unsupported |
 | u8 | 800x480 | 双摇杆 | happy5 | unsupported |
 | dr28s | 640x480 | 无摇杆 | happy5 | unsupported |
-| d007 | 640x480 | 双摇杆 | select | unsupported |
+| d007 | 640x480 | 双摇杆 | select | dual-gpio |
 | r50s | 854x480 | 双摇杆 | happy5 | unsupported |
 | rgb20s | 640x480 | 双摇杆 | happy5 | unsupported |
 | xf28 | 640x480 | 单摇杆 | select | ws2812 |
 | r36s | 640x480 | 双摇杆 | happy5 | unsupported |
+| r33s | 640x480 | 无摇杆 | select | unsupported |
 
 ## 作为库使用
 
