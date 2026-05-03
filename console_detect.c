@@ -71,10 +71,10 @@ static DeviceConfig device_configs[] = {
     {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led"},
     {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led"},
     {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported"},
-    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "gpio"},
+    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra"},
     {"xgb36",     "480p",   "single", "happy5", 0,    "gpio"},
     {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported"},
-    {"a10miniv2", "540p",   "none",   "happy5", 180,  "unsupported"},
+    {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported"},
     {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported"},
     {"u8",        "800p480","dual",   "happy5", 270,  "unsupported"},
     {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported"},
@@ -83,6 +83,8 @@ static DeviceConfig device_configs[] = {
     {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported"},
     {"xf28",      "480p",   "single", "select", 90,   "ws2812"},
     {"r33s",      "480p",   "none",   "select", 0,    "unsupported"},
+    {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported"},
+    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported"},
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported"},
     {NULL, NULL, NULL, NULL, 0, NULL}
 };
@@ -116,7 +118,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-r36ultra-linux.dtb",     "r36ultra"},
     {"rk3326-xgb36-linux.dtb",        "xgb36"},
     {"rk3326-a10mini-linux.dtb",      "a10mini"},
-    {"rk3326-a10mini-v2-linux.dtb",   "a10miniv2"},
+    {"rk3326-a10mini-v4-linux.dtb",   "a10miniv4"},
     {"rk3326-g350-linux.dtb",         "g350"},
     {"rk3326-u8-linux.dtb",           "u8"},
     {"rk3326-u8-v2-linux.dtb",        "u8"},
@@ -124,6 +126,8 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-d007-linux.dtb",         "d007"},
     {"rk3326-r50s-linux.dtb",         "r50s"},
     {"rk3326-rgb20s-linux.dtb",       "rgb20s"},
+    {"rk3326-xu10-linux.dtb",         "xu10"},
+    {"rk3326-r40s-linux.dtb",         "r40s"},
     {"rk3326-xf28-linux.dtb",         "xf28"},
     {NULL, NULL}
 };

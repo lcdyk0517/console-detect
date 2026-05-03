@@ -164,7 +164,7 @@ echo "r36s" > /boot/.console
 | k36s | 640x480 | 单摇杆 | happy5 | mcu_led |
 | r36tmax | 720x720 | 双摇杆 | happy5 | mcu_led |
 | t16max | 720x720 | 双摇杆 | happy5 | unsupported |
-| r36ultra | 720x720 | 双摇杆 | happy5 | gpio |
+| r36ultra | 720x720 | 双摇杆 | happy5 | r36ultra |
 | xgb36 | 640x480 | 单摇杆 | happy5 | gpio |
 | a10mini | 640x480 | 无摇杆 | happy5 | unsupported |
 | a10miniv2 | 720x540 | 无摇杆 | happy5 | unsupported |
@@ -173,6 +173,7 @@ echo "r36s" > /boot/.console
 | dr28s | 640x480 | 无摇杆 | happy5 | unsupported |
 | d007 | 640x480 | 双摇杆 | select | dual-gpio |
 | r50s | 854x480 | 双摇杆 | happy5 | unsupported |
+| r40s | 800x480 | 双摇杆 | happy5 | unsupported |
 | rgb20s | 640x480 | 双摇杆 | happy5 | unsupported |
 | xf28 | 640x480 | 单摇杆 | select | ws2812 |
 | r36s | 640x480 | 双摇杆 | happy5 | unsupported |
