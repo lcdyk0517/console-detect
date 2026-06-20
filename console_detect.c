@@ -21,6 +21,7 @@ typedef struct {
 } ResolutionMap;
 
 static ResolutionMap resolution_map[] = {
+    {"320p",   480,  320},
     {"480p",   640,  480},
     {"540p",   720,  540},
     {"720p",   720, 720},
@@ -54,7 +55,7 @@ typedef struct {
 /* 预定义设备配置 */
 static DeviceConfig device_configs[] = {
     {"mymini",    "480p",   "single", "select", 0,    "gpio"},
-    {"mini40",    "480p",   "single", "select", 0,    "gpio"},
+    {"mini40",    "720p",   "single", "select", 0,    "gpio"},
     {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led"},
     {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported"},
     {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported"},
@@ -85,6 +86,8 @@ static DeviceConfig device_configs[] = {
     {"r33s",      "480p",   "none",   "select", 0,    "unsupported"},
     {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported"},
     {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported"},
+    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported"},
+    {"rgb10",     "320p",   "single", "select", 270,  "unsupported"},
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported"},
     {NULL, NULL, NULL, NULL, 0, NULL}
 };
@@ -129,6 +132,8 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-xu10-linux.dtb",         "xu10"},
     {"rk3326-r40s-linux.dtb",         "r40s"},
     {"rk3326-xf28-linux.dtb",         "xf28"},
+    {"rk3326-rgb10max1-linux.dtb",    "rgb10max1"},
+    {"rk3326-rgb10-linux.dtb",        "rgb10"},
     {NULL, NULL}
 };
 
