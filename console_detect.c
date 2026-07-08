@@ -28,6 +28,7 @@ static ResolutionMap resolution_map[] = {
     {"768p",   1024, 768},
     {"800p480", 800, 480},
     {"854p480", 854, 480},
+    {"720p1280", 1280, 720},
     {NULL, 0, 0}
 };
 
@@ -40,6 +41,7 @@ typedef struct {
     const char *hotkey_type;
     int rotation;           /* 屏幕旋转角度 */
     const char *led_type;   /* mcu_led, gpio, ws2812, unsupported */
+    const char *otg_type;   /* auto, manual */
 } DeviceInfo;
 
 /* 设备配置表 */
@@ -50,46 +52,54 @@ typedef struct {
     const char *hotkey_type;    /* select, happy5 */
     int rotation;
     const char *led_type;       /* mcu_led, gpio, ws2812, unsupported */
+    const char *otg_type;       /* auto, manual */
 } DeviceConfig;
 
 /* 预定义设备配置 */
 static DeviceConfig device_configs[] = {
-    {"mymini",    "480p",   "single", "select", 0,    "gpio"},
-    {"mini40",    "720p",   "single", "select", 0,    "gpio"},
-    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led"},
-    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported"},
-    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported"},
-    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led"},
-    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812"},
-    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812"},
-    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812"},
-    {"r36h",      "480p",   "dual",   "select", 0,    "unsupported"},
-    {"r36splus",  "720p",   "dual",   "happy5", 0,    "unsupported"},
-    {"r46h",      "768p",   "dual",   "select", 0,    "unsupported"},
-    {"r40xx",     "768p",   "dual",   "happy5", 0,    "unsupported"},
-    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported"},
-    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported"},
-    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led"},
-    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led"},
-    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported"},
-    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra"},
-    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio"},
-    {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported"},
-    {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported"},
-    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported"},
-    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported"},
-    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported"},
-    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio"},
-    {"r50s",      "854p480","dual",   "happy5", 270,  "unsupported"},
-    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported"},
-    {"xf28",      "480p",   "single", "select", 90,   "ws2812"},
-    {"r33s",      "480p",   "none",   "select", 0,    "unsupported"},
-    {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported"},
-    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported"},
-    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported"},
-    {"rgb10",     "320p",   "single", "select", 270,  "unsupported"},
-    {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported"},
-    {NULL, NULL, NULL, NULL, 0, NULL}
+    {"mymini",    "480p",   "single", "select", 0,    "gpio",       "auto"},
+    {"mini40",    "720p",   "single", "select", 0,    "gpio",       "auto"},
+    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"rf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"rf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"rf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"xf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"dc45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"r36h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"r36splus",  "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r46h",      "768p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"r40xx",     "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
+    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led",    "auto"},
+    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra",   "auto"},
+    {"r36ultrax", "768p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio",       "auto"},
+    {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported","auto"},
+    {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported","auto"},
+    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported","auto"},
+    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio",  "auto"},
+    {"r50s",      "854p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"r50h",      "720p1280","dual",  "happy5", 270,  "unsupported","auto"},
+    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"xf28",      "480p",   "single", "select", 90,   "ws2812",     "auto"},
+    {"r33s",      "480p",   "none",   "select", 0,    "unsupported","auto"},
+    {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported","auto"},
+    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
+    {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {NULL, NULL, NULL, NULL, 0, NULL, NULL}
 };
 
 /* DTB 到设备名称映射表 */
@@ -102,12 +112,18 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-mymini-linux.dtb",       "mymini"},
     {"rk3326-mini40-linux.dtb",       "mini40"},
     {"rk3326-xf35h-linux.dtb",        "xf35h"},
+    {"rk3326-rf35h-linux.dtb",        "rf35h"},
     {"rk3326-r36pro-linux.dtb",       "r36pro"},
     {"rk3326-r36max-linux.dtb",       "r36max"},
+    {"rk3326-r36max-without-amp-linux.dtb",       "r36max"},
     {"rk3326-xf40h-linux.dtb",        "xf40h"},
+    {"rk3326-rf40h-linux.dtb",        "rf40h"},
     {"rk3326-dc40v-linux.dtb",        "dc40v"},
     {"rk3326-dc35v-linux.dtb",        "dc35v"},
     {"rk3326-r36max2-linux.dtb",      "r36max2"},
+    {"rk3326-rf45v-linux.dtb",        "rf45v"},
+    {"rk3326-xf45v-linux.dtb",        "xf45v"},
+    {"rk3326-dc45v-linux.dtb",        "dc45v"},
     {"rk3326-r36h-linux.dtb",         "r36h"},
     {"rk3326-r36splus-linux.dtb",     "r36splus"},
     {"rk3326-r46h-linux.dtb",         "r46h"},
@@ -119,6 +135,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-r36tmax-linux.dtb",      "r36tmax"},
     {"rk3326-t16max-linux.dtb",       "t16max"},
     {"rk3326-r36ultra-linux.dtb",     "r36ultra"},
+    {"rk3326-r36ultrax-linux.dtb",    "r36ultrax"},
     {"rk3326-xgb36-linux.dtb",        "xgb36"},
     {"rk3326-a10mini-linux.dtb",      "a10mini"},
     {"rk3326-a10mini-v4-linux.dtb",   "a10miniv4"},
@@ -128,6 +145,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-dr28s-linux.dtb",        "dr28s"},
     {"rk3326-d007-linux.dtb",         "d007"},
     {"rk3326-r50s-linux.dtb",         "r50s"},
+    {"rk3326-r50h-linux.dtb",         "r50h"},
     {"rk3326-rgb20s-linux.dtb",       "rgb20s"},
     {"rk3326-xu10-linux.dtb",         "xu10"},
     {"rk3326-r40s-linux.dtb",         "r40s"},
@@ -341,6 +359,7 @@ int get_device_info(DeviceInfo *info) {
     info->hotkey_type = config->hotkey_type;
     info->rotation = config->rotation;
     info->led_type = config->led_type;
+    info->otg_type = config->otg_type;
     
     return 0;
 }
@@ -354,6 +373,7 @@ void print_device_info(const DeviceInfo *info) {
     printf("热键类型:     %s\n", info->hotkey_type);
     printf("屏幕旋转:     %d 度\n", info->rotation);
     printf("LED类型:      %s\n", info->led_type);
+    printf("OTG类型:      %s\n", info->otg_type);
     printf("==============================\n");
 }
 
@@ -366,7 +386,8 @@ void print_device_info_json(const DeviceInfo *info) {
     printf("  \"joystick_count\": %d,\n", info->joystick_count);
     printf("  \"hotkey_type\": \"%s\",\n", info->hotkey_type);
     printf("  \"rotation\": %d,\n", info->rotation);
-    printf("  \"led_type\": \"%s\"\n", info->led_type);
+    printf("  \"led_type\": \"%s\",\n", info->led_type);
+    printf("  \"otg_type\": \"%s\"\n", info->otg_type);
     printf("}\n");
 }
 
@@ -379,6 +400,7 @@ void print_device_info_shell(const DeviceInfo *info) {
     printf("HOTKEY_TYPE=%s\n", info->hotkey_type);
     printf("SCREEN_ROTATION=%d\n", info->rotation);
     printf("LED_TYPE=%s\n", info->led_type);
+    printf("OTG_TYPE=%s\n", info->otg_type);
 }
 
 void print_usage(const char *program_name) {
@@ -393,6 +415,7 @@ void print_usage(const char *program_name) {
     printf("  -t, --hotkey      仅输出热键类型\n");
     printf("  -o, --rotation    仅输出屏幕旋转角度\n");
     printf("  -l, --led         仅输出LED类型\n");
+    printf("  -O, --otg         仅输出OTG类型\n");
     printf("  -b, --bootini     仅输出 boot.ini 检测的设备名称\n");
 }
 
@@ -423,6 +446,8 @@ int main(int argc, char *argv[]) {
             single_output = 5;
         } else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--led") == 0) {
             single_output = 6;
+        } else if (strcmp(argv[i], "-O") == 0 || strcmp(argv[i], "--otg") == 0) {
+            single_output = 8;
         } else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--bootini") == 0) {
             single_output = 7;
         }
@@ -453,6 +478,7 @@ int main(int argc, char *argv[]) {
             case 4: printf("%s\n", info.hotkey_type); break;
             case 5: printf("%d\n", info.rotation); break;
             case 6: printf("%s\n", info.led_type); break;
+            case 8: printf("%s\n", info.otg_type); break;
         }
     } else {
         switch (output_format) {

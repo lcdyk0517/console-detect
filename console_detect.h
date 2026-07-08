@@ -18,6 +18,7 @@ typedef struct {
     const char *hotkey_type;
     int rotation;           /* 屏幕旋转角度 */
     const char *led_type;   /* mcu_led, gpio, ws2812, unsupported */
+    const char *otg_type;   /* auto, manual */
 } DeviceInfo;
 
 /* 获取设备信息 */

@@ -10,6 +10,7 @@
 - 获取热键类型
 - 读取屏幕旋转角度
 - 识别 LED 类型
+- 获取 OTG 类型（auto/manual）
 
 ## 编译
 
@@ -54,6 +55,7 @@ sudo make install
 热键类型:     happy5
 屏幕旋转:     0 度
 LED类型:      unsupported
+OTG类型:      auto
 ==============================
 ```
 
@@ -70,6 +72,7 @@ LED类型:      unsupported
 | `-t` | `--hotkey` | 仅输出热键类型 |
 | `-o` | `--rotation` | 仅输出屏幕旋转角度 |
 | `-l` | `--led` | 仅输出 LED 类型 |
+| `-O` | `--otg` | 仅输出 OTG 类型 |
 
 ### 输出格式示例
 
@@ -87,7 +90,8 @@ LED类型:      unsupported
   "joystick_count": 2,
   "hotkey_type": "happy5",
   "rotation": 0,
-  "led_type": "unsupported"
+  "led_type": "unsupported",
+  "otg_type": "auto"
 }
 ```
 
@@ -105,6 +109,7 @@ JOYSTICK_COUNT=2
 HOTKEY_TYPE=happy5
 SCREEN_ROTATION=0
 LED_TYPE=unsupported
+OTG_TYPE=auto
 ```
 
 可在 Shell 脚本中使用：
@@ -129,6 +134,10 @@ echo "分辨率: ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # 仅获取摇杆数量
 ./console_detect -k
 # 输出: 2
+
+# 仅获取OTG类型
+./console_detect -O
+# 输出: auto
 ```
 
 ## 配置文件
@@ -145,39 +154,50 @@ echo "r36s" > /boot/.console
 
 ## 支持的设备
 
-| 设备代号 | 分辨率 | 摇杆 | 热键类型 | LED 类型 |
-|----------|--------|------|----------|----------|
-| mymini | 640x480 | 单摇杆 | select | gpio |
-| mini40 | 640x480 | 单摇杆 | select | gpio |
-| xf35h | 640x480 | 双摇杆 | select | mcu_led |
-| r36pro | 640x480 | 双摇杆 | happy5 | unsupported |
-| r36max | 720x720 | 双摇杆 | happy5 | unsupported |
-| xf40h | 720x720 | 双摇杆 | select | mcu_led |
-| dc40v | 720x720 | 双摇杆 | happy5 | ws2812 |
-| r36max2 | 1024x768 | 双摇杆 | happy5 | ws2812 |
-| r36h | 640x480 | 双摇杆 | select | unsupported |
-| r36splus | 720x720 | 双摇杆 | happy5 | unsupported |
-| r46h | 1024x768 | 双摇杆 | select | unsupported |
-| r40xx | 1024x768 | 双摇杆 | happy5 | unsupported |
-| hg36 | 640x480 | 双摇杆 | happy5 | unsupported |
-| rx6h | 640x480 | 双摇杆 | select | unsupported |
-| k36s | 640x480 | 单摇杆 | happy5 | mcu_led |
-| r36tmax | 720x720 | 双摇杆 | happy5 | mcu_led |
-| t16max | 720x720 | 双摇杆 | happy5 | unsupported |
-| r36ultra | 720x720 | 双摇杆 | happy5 | r36ultra |
-| xgb36 | 640x480 | 单摇杆 | happy5 | gpio |
-| a10mini | 640x480 | 无摇杆 | happy5 | unsupported |
-| a10miniv2 | 720x540 | 无摇杆 | happy5 | unsupported |
-| g350 | 640x480 | 双摇杆 | happy5 | unsupported |
-| u8 | 800x480 | 双摇杆 | happy5 | unsupported |
-| dr28s | 640x480 | 无摇杆 | happy5 | unsupported |
-| d007 | 640x480 | 双摇杆 | select | dual-gpio |
-| r50s | 854x480 | 双摇杆 | happy5 | unsupported |
-| r40s | 800x480 | 双摇杆 | happy5 | unsupported |
-| rgb20s | 640x480 | 双摇杆 | happy5 | unsupported |
-| xf28 | 640x480 | 单摇杆 | select | ws2812 |
-| r36s | 640x480 | 双摇杆 | happy5 | unsupported |
-| r33s | 640x480 | 无摇杆 | select | unsupported |
+| 设备代号 | 分辨率 | 摇杆 | 热键类型 | LED 类型 | OTG 类型 |
+|----------|--------|------|----------|----------|----------|
+| mymini | 480p | 单摇杆 | select | gpio | auto |
+| mini40 | 720p | 单摇杆 | select | gpio | auto |
+| xf35h | 480p | 双摇杆 | select | mcu_led | auto |
+| rf35h | 480p | 双摇杆 | select | mcu_led | auto |
+| r36pro | 480p | 双摇杆 | happy5 | unsupported | auto |
+| r36max | 720p | 双摇杆 | happy5 | unsupported | auto |
+| xf40h | 720p | 双摇杆 | select | mcu_led | auto |
+| rf40h | 720p | 双摇杆 | select | mcu_led | auto |
+| dc40v | 720p | 双摇杆 | happy5 | ws2812 | auto |
+| dc35v | 480p | 双摇杆 | happy5 | ws2812 | auto |
+| r36max2 | 768p | 双摇杆 | happy5 | ws2812 | manual |
+| rf45v | 768p | 双摇杆 | happy5 | ws2812 | manual |
+| xf45v | 768p | 双摇杆 | happy5 | ws2812 | manual |
+| dc45v | 768p | 双摇杆 | happy5 | ws2812 | manual |
+| r36h | 480p | 双摇杆 | select | unsupported | auto |
+| r36splus | 720p | 双摇杆 | happy5 | unsupported | auto |
+| r46h | 768p | 双摇杆 | select | unsupported | auto |
+| r40xx | 768p | 双摇杆 | happy5 | unsupported | auto |
+| hg36 | 480p | 双摇杆 | happy5 | unsupported | auto |
+| rx6h | 480p | 双摇杆 | select | unsupported | auto |
+| k36s | 480p | 单摇杆 | happy5 | mcu_led | auto |
+| r36tmax | 720p | 双摇杆 | happy5 | mcu_led | auto |
+| t16max | 720p | 双摇杆 | happy5 | unsupported | auto |
+| r36ultra | 720p | 双摇杆 | happy5 | r36ultra | auto |
+| r36ultrax | 768p | 双摇杆 | happy5 | ws2812 | auto |
+| xgb36 | 480p | 单摇杆 | happy5 | gpio | auto |
+| a10mini | 480p | 无摇杆 | happy5 | unsupported | auto |
+| a10miniv4 | 540p | 无摇杆 | happy5 | unsupported | auto |
+| g350 | 480p | 双摇杆 | happy5 | unsupported | auto |
+| u8 | 800p480 | 双摇杆 | happy5 | unsupported | auto |
+| dr28s | 480p | 无摇杆 | happy5 | unsupported | auto |
+| d007 | 480p | 双摇杆 | select | dual-gpio | auto |
+| r50s | 854p480 | 双摇杆 | happy5 | unsupported | auto |
+| r50h | 720p1280 | 双摇杆 | happy5 | unsupported | auto |
+| rgb20s | 480p | 双摇杆 | happy5 | unsupported | auto |
+| xf28 | 480p | 单摇杆 | select | ws2812 | auto |
+| r33s | 480p | 无摇杆 | select | unsupported | auto |
+| xu10 | 480p | 无摇杆 | happy5 | unsupported | auto |
+| r40s | 800p480 | 双摇杆 | happy5 | unsupported | auto |
+| rgb10max1 | 854p480 | 双摇杆 | happy5 | unsupported | auto |
+| rgb10 | 320p | 单摇杆 | select | unsupported | auto |
+| r36s | 480p | 双摇杆 | happy5 | unsupported | auto |
 
 ## 作为库使用
 
@@ -195,10 +215,11 @@ int main() {
         return 1;
     }
     
-    printf("设备: %s, 分辨率: %dx%d\n", 
+    printf("设备: %s, 分辨率: %dx%d, OTG: %s\n", 
            info.device_name, 
            info.screen_width, 
-           info.screen_height);
+           info.screen_height,
+           info.otg_type);
     
     return 0;
 }
