@@ -11,6 +11,7 @@
 - 读取屏幕旋转角度
 - 识别 LED 类型
 - 获取 OTG 类型（auto/manual）
+- 检测系统版本（ArkOS4Clone/dArkOS4Clone/NULL）
 
 ## 编译
 
@@ -56,6 +57,7 @@ sudo make install
 屏幕旋转:     0 度
 LED类型:      unsupported
 OTG类型:      auto
+系统版本:     ArkOS4Clone
 ==============================
 ```
 
@@ -73,6 +75,7 @@ OTG类型:      auto
 | `-o` | `--rotation` | 仅输出屏幕旋转角度 |
 | `-l` | `--led` | 仅输出 LED 类型 |
 | `-O` | `--otg` | 仅输出 OTG 类型 |
+| `-V` | `--version` | 仅输出系统版本 |
 
 ### 输出格式示例
 
@@ -91,7 +94,8 @@ OTG类型:      auto
   "hotkey_type": "happy5",
   "rotation": 0,
   "led_type": "unsupported",
-  "otg_type": "auto"
+  "otg_type": "auto",
+  "os_version": "ArkOS4Clone"
 }
 ```
 
@@ -110,6 +114,7 @@ HOTKEY_TYPE=happy5
 SCREEN_ROTATION=0
 LED_TYPE=unsupported
 OTG_TYPE=auto
+OS_VERSION=ArkOS4Clone
 ```
 
 可在 Shell 脚本中使用：
@@ -138,6 +143,10 @@ echo "分辨率: ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # 仅获取OTG类型
 ./console_detect -O
 # 输出: auto
+
+# 仅获取系统版本
+./console_detect -V
+# 输出: ArkOS4Clone
 ```
 
 ## 配置文件
@@ -151,6 +160,17 @@ echo "分辨率: ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 ```bash
 echo "r36s" > /boot/.console
 ```
+
+## 系统版本检测
+
+程序从 `/etc/os-release` 文件读取 `PRETTY_NAME` 字段来检测系统版本：
+
+| PRETTY_NAME 值 | 输出 |
+|----------------|------|
+| `Ubuntu 19.10` | `ArkOS4Clone` |
+| `Debian GNU/Linux 13 (trixie)` | `dArkOS4Clone` |
+| 其他值 | `NULL` |
+| 文件不存在或解析失败 | `Unknown` |
 
 ## 支持的设备
 
@@ -215,11 +235,12 @@ int main() {
         return 1;
     }
     
-    printf("设备: %s, 分辨率: %dx%d, OTG: %s\n", 
+    printf("设备: %s, 分辨率: %dx%d, OTG: %s, 系统版本: %s\n", 
            info.device_name, 
            info.screen_width, 
            info.screen_height,
-           info.otg_type);
+           info.otg_type,
+           info.os_version);
     
     return 0;
 }

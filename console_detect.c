@@ -12,6 +12,7 @@
 #define MAX_DEVICES 64
 #define CONFIG_FILE "/boot/.console"
 #define BOOT_INI_FILE "/boot/boot.ini"
+#define OS_RELEASE_FILE "/etc/os-release"
 
 /* 屏幕分辨率映射 */
 typedef struct {
@@ -42,6 +43,7 @@ typedef struct {
     int rotation;           /* 屏幕旋转角度 */
     const char *led_type;   /* mcu_led, gpio, ws2812, unsupported */
     const char *otg_type;   /* auto, manual */
+    char os_version[128];   /* 系统版本 */
 } DeviceInfo;
 
 /* 设备配置表 */
@@ -98,6 +100,8 @@ static DeviceConfig device_configs[] = {
     {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto"},
     {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
     {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
+    {"h7",        "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    {"go2",       "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
     {NULL, NULL, NULL, NULL, 0, NULL, NULL}
 };
@@ -152,6 +156,8 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-xf28-linux.dtb",         "xf28"},
     {"rk3326-rgb10max1-linux.dtb",    "rgb10max1"},
     {"rk3326-rgb10-linux.dtb",        "rgb10"},
+    {"rk3326-h7-linux.dtb",           "h7"},
+    {"rk3326-go2-linux.dtb",          "go2"},
     {NULL, NULL}
 };
 
@@ -335,6 +341,69 @@ static int read_console_file(char *device_name, size_t max_len) {
     return 0;
 }
 
+/* 读取系统版本 */
+static int read_os_version(char *os_version, size_t max_len) {
+    FILE *fp;
+    char line[MAX_LINE_LENGTH];
+    char *value_start, *value_end;
+    
+    fp = fopen(OS_RELEASE_FILE, "r");
+    if (fp == NULL) {
+        strncpy(os_version, "Unknown", max_len - 1);
+        os_version[max_len - 1] = '\0';
+        return -1;
+    }
+    
+    os_version[0] = '\0';
+    
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        char *trimmed = trim(line);
+        
+        /* 查找 PRETTY_NAME 字段 */
+        if (strncmp(trimmed, "PRETTY_NAME=", 12) == 0) {
+            value_start = trimmed + 12;
+            
+            /* 跳过开头的引号 */
+            if (*value_start == '"') {
+                value_start++;
+            }
+            
+            /* 查找结尾的引号或行尾 */
+            value_end = value_start;
+            while (*value_end != '\0' && *value_end != '"' && *value_end != '\n' && *value_end != '\r') {
+                value_end++;
+            }
+            
+            int len = value_end - value_start;
+            if (len > 0 && len < (int)max_len) {
+                strncpy(os_version, value_start, len);
+                os_version[len] = '\0';
+                
+                /* 如果是 Ubuntu 19.10 输出 ArkOS4Clone，Debian 13 输出 dArkOS4Clone，否则输出 NULL */
+                if (strcmp(os_version, "Ubuntu 19.10") == 0) {
+                    strncpy(os_version, "ArkOS4Clone", max_len - 1);
+                } else if (strcmp(os_version, "Debian GNU/Linux 13 (trixie)") == 0) {
+                    strncpy(os_version, "dArkOS4Clone", max_len - 1);
+                } else {
+                    strncpy(os_version, "NULL", max_len - 1);
+                }
+                os_version[max_len - 1] = '\0';
+                break;
+            }
+        }
+    }
+    
+    fclose(fp);
+    
+    if (os_version[0] == '\0') {
+        strncpy(os_version, "Unknown", max_len - 1);
+        os_version[max_len - 1] = '\0';
+        return -1;
+    }
+    
+    return 0;
+}
+
 /* 获取设备信息 */
 int get_device_info(DeviceInfo *info) {
     char device_name[64];
@@ -361,6 +430,9 @@ int get_device_info(DeviceInfo *info) {
     info->led_type = config->led_type;
     info->otg_type = config->otg_type;
     
+    /* 读取系统版本 */
+    read_os_version(info->os_version, sizeof(info->os_version));
+    
     return 0;
 }
 
@@ -374,6 +446,7 @@ void print_device_info(const DeviceInfo *info) {
     printf("屏幕旋转:     %d 度\n", info->rotation);
     printf("LED类型:      %s\n", info->led_type);
     printf("OTG类型:      %s\n", info->otg_type);
+    printf("系统版本:     %s\n", info->os_version);
     printf("==============================\n");
 }
 
@@ -387,7 +460,8 @@ void print_device_info_json(const DeviceInfo *info) {
     printf("  \"hotkey_type\": \"%s\",\n", info->hotkey_type);
     printf("  \"rotation\": %d,\n", info->rotation);
     printf("  \"led_type\": \"%s\",\n", info->led_type);
-    printf("  \"otg_type\": \"%s\"\n", info->otg_type);
+    printf("  \"otg_type\": \"%s\",\n", info->otg_type);
+    printf("  \"os_version\": \"%s\"\n", info->os_version);
     printf("}\n");
 }
 
@@ -401,6 +475,7 @@ void print_device_info_shell(const DeviceInfo *info) {
     printf("SCREEN_ROTATION=%d\n", info->rotation);
     printf("LED_TYPE=%s\n", info->led_type);
     printf("OTG_TYPE=%s\n", info->otg_type);
+    printf("OS_VERSION=%s\n", info->os_version);
 }
 
 void print_usage(const char *program_name) {
@@ -417,6 +492,7 @@ void print_usage(const char *program_name) {
     printf("  -l, --led         仅输出LED类型\n");
     printf("  -O, --otg         仅输出OTG类型\n");
     printf("  -b, --bootini     仅输出 boot.ini 检测的设备名称\n");
+    printf("  -V, --version     仅输出系统版本\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -450,6 +526,8 @@ int main(int argc, char *argv[]) {
             single_output = 8;
         } else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--bootini") == 0) {
             single_output = 7;
+        } else if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
+            single_output = 9;
         }
     }
     
@@ -479,6 +557,7 @@ int main(int argc, char *argv[]) {
             case 5: printf("%d\n", info.rotation); break;
             case 6: printf("%s\n", info.led_type); break;
             case 8: printf("%s\n", info.otg_type); break;
+            case 9: printf("%s\n", info.os_version); break;
         }
     } else {
         switch (output_format) {
