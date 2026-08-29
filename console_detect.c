@@ -57,61 +57,90 @@ typedef struct {
     const char *otg_type;       /* auto, manual */
 } DeviceConfig;
 
-/* 预定义设备配置 */
+/* 预定义设备配置 (顺序与 dtb_selector.go 的 Consoles 一致) */
 static DeviceConfig device_configs[] = {
-    {"mymini",    "480p",   "single", "select", 0,    "gpio",       "auto"},
-    {"mini40",    "720p",   "single", "select", 0,    "gpio",       "auto"},
-    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"rf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"rf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"rf45h",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"rf55h",     "720p1280","dual",  "happy5", 90,   "ws2812",     "manual"},
-    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"rf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"xf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"dc45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"r36h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"r36splus",  "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r46h",      "768p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"r40xx",     "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
-    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led",    "auto"},
-    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra",   "auto"},
-    {"r36ultrax", "768p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio",       "auto"},
+    /*==================  YMC  ===================================*/
     {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported","auto"},
     {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported","auto"},
-    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported","auto"},
-    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio",  "auto"},
-    {"r50s",      "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"r50h",      "720p1280","dual",  "happy5", 270,  "unsupported","auto"},
-    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"xf28",      "480p",   "single", "select", 90,   "ws2812",     "auto"},
-    {"r33s",      "480p",   "none",   "select", 0,    "unsupported","auto"},
+    /*==================  UDT  ===================================*/
+    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra",   "auto"},
+    {"r36ultrax", "768p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    /*==================  AISLPC  ===================================*/
+    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
+    {"r36t",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
+    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led",    "auto"},
+    /*==================  GUSGU  ===================================*/
+    {"h7",        "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    /*==================  Lenovo  ===================================*/
+    {"go2",       "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    /*==================  MagicX  ===================================*/
     {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported","auto"},
-    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rgb10max2", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
-    {"rgbv10",    "320p",   "none",   "select", 270,  "unsupported","auto"},
-    {"rgb10x",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
-    {"rp1",       "480p",   "single", "happy5", 270,  "unsupported","auto"},
+    /*==================  Batlexp  ===================================*/
+    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    /*==================  Kinhank  ===================================*/
+    {"k36",       "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    /*==================  Anbernic  ===================================*/
     {"rg351mp",   "480p",   "dual",   "select", 0,    "unsupported","auto"},
     {"rg351p",    "320p",   "single", "select", 270,  "unsupported","auto"},
     {"rg351v",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
-    {"h7",        "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
-    {"go2",       "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    /*==================  RetroBox  ===================================*/
+    {"rp1",       "480p",   "single", "happy5", 270,  "unsupported","auto"},
+    /*==================  Powkiddy  ===================================*/
+    {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
+    {"rgbv10",    "320p",   "none",   "select", 270,  "unsupported","auto"},
+    {"rgb10x",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
+    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"rgb10max2", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    /*==================  Clone R36s  ===================================*/
+    /* (clone type 均映射到 r36s，见 dtb_mapping) */
+    /*==================  GameConsole  ===================================*/
+    {"r46h",       "768p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"r40xxpromax","768p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r40xx",      "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36hpromax", "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r45h",       "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36splus",   "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r33s",       "480p",   "none",   "select", 0,    "unsupported","auto"},
+    {"r36xx",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"o30s",       "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36h",       "480p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"r50s",       "854p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"r50h",       "720p1280","dual",  "happy5", 270,  "unsupported","auto"},
+    /*==================  Soysauce R36s  ==============================*/
+    /* (sauce panel1-5 均映射到 r36s，见 dtb_mapping) */
+    /*==================  Diium(SZDiiER)  ==============================*/
+    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported","auto"},
+    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio",  "auto"},
+    /*==================  XiFan HandHelds  ============================*/
+    {"mymini",    "480p",   "single", "select", 0,    "gpio",       "auto"},
+    {"mini40",    "720p",   "single", "select", 0,    "gpio",       "auto"},
+    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"rf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"rf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
+    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"xf40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"xf28",      "480p",   "single", "select", 90,   "ws2812",     "auto"},
+    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"xf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"dc45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"rf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"rf45h",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
+    {"rf55h",     "720p1280","dual",  "happy5", 90,   "ws2812",     "manual"},
+    /*==================  Other  =====================================*/
+    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
+    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio",       "auto"},
+    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"rg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
     {"rg36pro",   "480p",   "dual",   "happy5", 0,    "single-gpio","auto"},
+    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto"},
+    /*==================  fallback  ===================================*/
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
     {NULL, NULL, NULL, NULL, 0, NULL, NULL}
 };
@@ -122,64 +151,93 @@ typedef struct {
     const char *device_name;
 } DtbMap;
 
+/* DTB 到设备名称映射表 (顺序与 dtb_selector.go 的 Consoles 一致) */
 static DtbMap dtb_mapping[] = {
-    {"rk3326-mymini-linux.dtb",       "mymini"},
-    {"rk3326-mini40-linux.dtb",       "mini40"},
-    {"rk3326-xf35h-linux.dtb",        "xf35h"},
-    {"rk3326-rf35h-linux.dtb",        "rf35h"},
-    {"rk3326-r36pro-linux.dtb",       "r36pro"},
-    {"rk3326-r36max-type1-linux.dtb",  "r36max"},
-    {"rk3326-r36max-type2-linux.dtb",  "r36max"},
-    {"rk3326-r36max-type3-linux.dtb",  "r36max"},
-    {"rk3326-xf40h-linux.dtb",        "xf40h"},
-    {"rk3326-rf40h-linux.dtb",        "rf40h"},
-    {"rk3326-rf45h-linux.dtb",        "rf45h"},
-    {"rk3326-rf55h-linux.dtb",        "rf55h"},
-    {"rk3326-dc40v-linux.dtb",        "dc40v"},
-    {"rk3326-dc35v-linux.dtb",        "dc35v"},
-    {"rk3326-r36max2-linux.dtb",      "r36max2"},
-    {"rk3326-rf45v-linux.dtb",        "rf45v"},
-    {"rk3326-xf45v-linux.dtb",        "xf45v"},
-    {"rk3326-dc45v-linux.dtb",        "dc45v"},
-    {"rk3326-r36h-linux.dtb",         "r36h"},
-    {"rk3326-r36splus-linux.dtb",     "r36splus"},
-    {"rk3326-r46h-linux.dtb",         "r46h"},
-    {"rk3326-r33s-linux.dtb",         "r33s"},
-    {"rk3326-r40xx-linux.dtb",        "r40xx"},
-    {"rk3326-hg36-linux.dtb",         "hg36"},
-    {"rk3326-rx6h-linux.dtb",         "rx6h"},
-    {"rk3326-k36s-linux.dtb",         "k36s"},
-    {"rk3326-r36tmax-linux.dtb",      "r36tmax"},
-    {"rk3326-t16max-linux.dtb",       "t16max"},
-    {"rk3326-r36ultra-linux.dtb",     "r36ultra"},
-    {"rk3326-r36ultrax-linux.dtb",    "r36ultrax"},
-    {"rk3326-xgb36-linux.dtb",        "xgb36"},
-    {"rk3326-a10mini-linux.dtb",      "a10mini"},
-    {"rk3326-a10mini-v4-linux.dtb",   "a10miniv4"},
-    {"rk3326-g350-linux.dtb",         "g350"},
-    {"rk3326-u8-linux.dtb",           "u8"},
-    {"rk3326-u8-v2-linux.dtb",        "u8"},
-    {"rk3326-dr28s-linux.dtb",        "dr28s"},
-    {"rk3326-d007-linux.dtb",         "d007"},
-    {"rk3326-r50s-linux.dtb",         "r50s"},
-    {"rk3326-r50h-linux.dtb",         "r50h"},
-    {"rk3326-rgb20s-linux.dtb",       "rgb20s"},
-    {"rk3326-xu10-linux.dtb",         "xu10"},
-    {"rk3326-r40s-linux.dtb",         "r40s"},
-    {"rk3326-xf28-linux.dtb",         "xf28"},
-    {"rk3326-rgb10max1-linux.dtb",    "rgb10max1"},
-    {"rk3326-rgb10max2-linux.dtb",    "rgb10max2"},
-    {"rk3326-rgb10-linux.dtb",        "rgb10"},
-    {"rk3326-rgbv10-linux.dtb",       "rgbv10"},
-    {"rk3326-rgb10x-linux.dtb",       "rgb10x"},
-    {"rk3326-rp1-linux.dtb",          "rp1"},
-    {"rk3326-rg351mp-linux.dtb",      "rg351mp"},
-    {"rk3326-rg351p-linux.dtb",       "rg351p"},
-    {"rk3326-rg351v-linux.dtb",       "rg351v"},
-    {"rk3326-rg351v-v2-linux.dtb",       "rg351v"},
-    {"rk3326-h7-linux.dtb",           "h7"},
-    {"rk3326-rg36pro-linux.dtb",      "rg36pro"},
-    {"rk3326-go2-linux.dtb",          "go2"},
+    /*==================  YMC  ===================================*/
+    {"rk3326-a10mini-linux.dtb",          "a10mini"},
+    {"rk3326-a10mini-v4-linux.dtb",       "a10miniv4"},
+    /*==================  UDT  ===================================*/
+    {"rk3326-r36ultra-linux.dtb",         "r36ultra"},
+    {"rk3326-r36ultrax-linux.dtb",        "r36ultrax"},
+    /*==================  AISLPC  ===================================*/
+    {"rk3326-k36s-linux.dtb",             "k36s"},
+    {"rk3326-r36t-linux.dtb",             "r36t"},
+    {"rk3326-r36tmax-linux.dtb",          "r36tmax"},
+    /*==================  GUSGU  ===================================*/
+    {"rk3326-h7-linux.dtb",               "h7"},
+    /*==================  Lenovo  ===================================*/
+    {"rk3326-go2-linux.dtb",              "go2"},
+    /*==================  MagicX  ===================================*/
+    {"rk3326-xu10-linux.dtb",             "xu10"},
+    /*==================  Batlexp  ===================================*/
+    {"rk3326-g350-linux.dtb",             "g350"},
+    /*==================  Kinhank  ===================================*/
+    {"rk3326-k36-linux.dtb",              "k36"},
+    /*==================  Anbernic  ===================================*/
+    {"rk3326-rg351mp-linux.dtb",          "rg351mp"},
+    {"rk3326-rg351p-linux.dtb",           "rg351p"},
+    {"rk3326-rg351v-panel1-linux.dtb",    "rg351v"},
+    {"rk3326-rg351v-panel2-linux.dtb",    "rg351v"},
+    /*==================  RetroBox  ===================================*/
+    {"rk3326-rp1-linux.dtb",              "rp1"},
+    /*==================  Powkiddy  ===================================*/
+    {"rk3326-rgb10-linux.dtb",            "rgb10"},
+    {"rk3326-rgbv10-linux.dtb",           "rgbv10"},
+    {"rk3326-rgb10x-linux.dtb",           "rgb10x"},
+    {"rk3326-rgb10max1-linux.dtb",        "rgb10max1"},
+    {"rk3326-rgb10max2-linux.dtb",        "rgb10max2"},
+    {"rk3326-rgb20s-linux.dtb",           "rgb20s"},
+    /*==================  Clone R36s  ===================================*/
+    /* fallback 默认为 "r36s" */
+    /*==================  GameConsole  ===================================*/
+    {"rk3326-r46h-linux.dtb",             "r46h"},
+    {"rk3326-r40xxpromax-linux.dtb",      "r40xxpromax"},
+    {"rk3326-r40xx-linux.dtb",            "r40xx"},
+    {"rk3326-r36hpromax-linux.dtb",       "r36hpromax"},
+    {"rk3326-r45h-linux.dtb",             "r45h"},
+    {"rk3326-r36splus-linux.dtb",         "r36splus"},
+    {"rk3326-r33s-linux.dtb",             "r33s"},
+    {"rk3326-r36xx-linux.dtb",            "r36xx"},
+    {"rk3326-o30s-linux.dtb",             "o30s"},
+    {"rk3326-r36h-linux.dtb",             "r36h"},
+    {"rk3326-r50s-linux.dtb",             "r50s"},
+    {"rk3326-r50h-linux.dtb",             "r50h"},
+    /*==================  Soysauce R36s  ==============================*/
+    /* fallback 默认为 "r36s" */
+    /*==================  Diium(SZDiiER)  ==============================*/
+    {"rk3326-dr28s-linux.dtb",            "dr28s"},
+    {"rk3326-d007-linux.dtb",             "d007"},
+    /*==================  XiFan HandHelds  ============================*/
+    {"rk3326-mymini-linux.dtb",           "mymini"},
+    {"rk3326-mini40-linux.dtb",           "mini40"},
+    {"rk3326-r36max-type1-linux.dtb",     "r36max"},
+    {"rk3326-r36max-type2-linux.dtb",     "r36max"},
+    {"rk3326-r36max-type3-linux.dtb",     "r36max"},
+    {"rk3326-r36pro-linux.dtb",           "r36pro"},
+    {"rk3326-xf35h-linux.dtb",            "xf35h"},
+    {"rk3326-rf35h-linux.dtb",            "rf35h"},
+    {"rk3326-xf40h-linux.dtb",            "xf40h"},
+    {"rk3326-rf40h-linux.dtb",            "rf40h"},
+    {"rk3326-dc35v-linux.dtb",            "dc35v"},
+    {"rk3326-dc40v-linux.dtb",            "dc40v"},
+    {"rk3326-xf40v-linux.dtb",            "xf40v"},
+    {"rk3326-xf28-linux.dtb",             "xf28"},
+    {"rk3326-r36max2-linux.dtb",          "r36max2"},
+    {"rk3326-xf45v-linux.dtb",            "xf45v"},
+    {"rk3326-dc45v-linux.dtb",            "dc45v"},
+    {"rk3326-rf45v-linux.dtb",            "rf45v"},
+    {"rk3326-rf45h-linux.dtb",            "rf45h"},
+    {"rk3326-rf55h-linux.dtb",            "rf55h"},
+    /*==================  Other  =====================================*/
+    {"rk3326-hg36-linux.dtb",             "hg36"},
+    {"rk3326-rx6h-linux.dtb",             "rx6h"},
+    {"rk3326-xgb36-linux.dtb",            "xgb36"},
+    {"rk3326-t16max-linux.dtb",           "t16max"},
+    {"rk3326-u8-panel1-linux.dtb",        "u8"},
+    {"rk3326-u8-panel2-linux.dtb",        "u8"},
+    {"rk3326-rg36-linux.dtb",             "rg36"},
+    {"rk3326-rg36pro-linux.dtb",          "rg36pro"},
+    {"rk3326-r40s-linux.dtb",             "r40s"},
     {NULL, NULL}
 };
 
