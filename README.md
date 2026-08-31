@@ -241,7 +241,7 @@ echo "r36s" > /boot/.console
 
 | 设备代号 | 分辨率 | 摇杆 | 热键类型 | 旋转 | LED 类型 | OTG 类型 |
 |----------|--------|------|----------|------|----------|----------|
-| rp1 | 480p | 单 | happy5 | 270 | unsupported | auto |
+| rp1 | 480p | 单 | happy5 | 0 | unsupported | auto |
 
 ### Powkiddy
 

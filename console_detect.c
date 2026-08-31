@@ -84,7 +84,7 @@ static DeviceConfig device_configs[] = {
     {"rg351p",    "320p",   "single", "select", 270,  "unsupported","auto"},
     {"rg351v",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
     /*==================  RetroBox  ===================================*/
-    {"rp1",       "480p",   "single", "happy5", 270,  "unsupported","auto"},
+    {"rp1",       "480p",   "single", "happy5", 0,    "unsupported","auto"},
     /*==================  Powkiddy  ===================================*/
     {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
     {"rgbv10",    "320p",   "none",   "select", 270,  "unsupported","auto"},
