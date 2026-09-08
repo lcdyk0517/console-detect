@@ -38,11 +38,12 @@ typedef struct {
     char device_name[64];
     int screen_width;
     int screen_height;
-    int joystick_count;     /* -1: none, 0: single, 1: dual */
+    int joystick_count;     /* 0: none, 1: single, 2: dual */
     const char *hotkey_type;
     int rotation;           /* 屏幕旋转角度 */
     const char *led_type;   /* mcu_led, gpio, ws2812, unsupported */
     const char *otg_type;   /* auto, manual */
+    const char *volume_type; /* adc, gpio */
     char os_version[128];   /* 系统版本 */
 } DeviceInfo;
 
@@ -55,96 +56,97 @@ typedef struct {
     int rotation;
     const char *led_type;       /* mcu_led, gpio, ws2812, unsupported */
     const char *otg_type;       /* auto, manual */
+    const char *volume_type;    /* adc, gpio */
 } DeviceConfig;
 
 /* 预定义设备配置 (顺序与 dtb_selector.go 的 Consoles 一致) */
 static DeviceConfig device_configs[] = {
     /*==================  YMC  ===================================*/
-    {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported","auto"},
-    {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported","auto"},
+    {"a10mini",   "480p",   "none",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"a10miniv4", "540p",   "none",   "happy5", 180,  "unsupported","auto",    "gpio"},
     /*==================  UDT  ===================================*/
-    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra",   "auto"},
-    {"r36ultrax", "768p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"r36ultra",  "720p",   "dual",   "happy5", 0,    "r36ultra",   "auto",    "adc"},
+    {"r36ultrax", "768p",   "dual",   "happy5", 0,    "ws2812",     "auto",    "adc"},
     /*==================  AISLPC  ===================================*/
-    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
-    {"r36t",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto"},
-    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led",    "auto"},
+    {"k36s",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto",    "adc"},
+    {"r36t",      "480p",   "single", "happy5", 0,    "mcu_led",    "auto",    "adc"},
+    {"r36tmax",   "720p",   "dual",   "happy5", 0,    "mcu_led",    "auto",    "adc"},
     /*==================  GUSGU  ===================================*/
-    {"h7",        "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    {"h7",        "768p",   "single", "happy5", 0,    "ws2812",     "auto",    "gpio"},
     /*==================  Lenovo  ===================================*/
-    {"go2",       "768p",   "single", "happy5", 0,    "ws2812",     "auto"},
+    {"go2",       "768p",   "single", "happy5", 0,    "ws2812",     "auto",    "gpio"},
     /*==================  MagicX  ===================================*/
-    {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported","auto"},
+    {"xu10",      "480p",   "none",   "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  Batlexp  ===================================*/
-    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"g350",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  CoolBoy  ===================================*/
-    {"rs16",      "480p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
+    {"rs16",      "480p",   "dual",   "happy5", 0,    "ws2812",     "auto",    "adc"},
     /*==================  Kinhank  ===================================*/
-    {"k36",       "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"k36",       "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "adc"},
     /*==================  Anbernic  ===================================*/
-    {"rg351mp",   "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"rg351p",    "320p",   "single", "select", 270,  "unsupported","auto"},
-    {"rg351v",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
+    {"rg351mp",   "480p",   "dual",   "select", 0,    "unsupported","auto",    "gpio"},
+    {"rg351p",    "320p",   "single", "select", 270,  "unsupported","auto",    ""},
+    {"rg351v",    "480p",   "single", "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  RetroBox  ===================================*/
-    {"rp1",       "480p",   "single", "happy5", 0,    "unsupported","auto"},
+    {"rp1",       "480p",   "single", "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  Powkiddy  ===================================*/
-    {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto"},
-    {"rgbv10",    "320p",   "none",   "select", 270,  "unsupported","auto"},
-    {"rgb10x",    "480p",   "single", "happy5", 0,    "unsupported","auto"},
-    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rgb10max2", "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
+    {"rgb10",     "320p",   "single", "select", 270,  "unsupported","auto",    "gpio"},
+    {"rgbv10",    "320p",   "none",   "select", 270,  "unsupported","auto",    "gpio"},
+    {"rgb10x",    "480p",   "single", "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"rgb10max1", "854p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
+    {"rgb10max2", "854p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
+    {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  Clone R36s  ===================================*/
     /* (clone type 均映射到 r36s，见 dtb_mapping) */
     /*==================  GameConsole  ===================================*/
-    {"r46h",       "768p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"r40xxpromax","768p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r40xx",      "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36hpromax", "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r45h",       "768p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36splus",   "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r33s",       "480p",   "none",   "select", 0,    "unsupported","auto"},
-    {"r36xx",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"o30s",       "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36h",       "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"r50s",       "854p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"r50h",       "720p1280","dual",  "happy5", 270,  "unsupported","auto"},
+    {"r46h",       "768p",   "dual",   "select", 0,    "unsupported","auto",    "gpio"},
+    {"r40xxpromax","768p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r40xx",      "768p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r36hpromax", "768p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r45h",       "768p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r36splus",   "720p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r33s",       "480p",   "none",   "select", 0,    "unsupported","auto",    "gpio"},
+    {"r36xx",      "480p",   "dual",   "select", 0,    "unsupported","auto",    "gpio"},
+    {"o30s",       "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"r36h",       "480p",   "dual",   "select", 0,    "unsupported","auto",    "gpio"},
+    {"r50s",       "854p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
+    {"r50h",       "720p1280","dual",  "happy5", 270,  "unsupported","auto",    "gpio"},
     /*==================  Soysauce R36s  ==============================*/
     /* (sauce panel1-5 均映射到 r36s，见 dtb_mapping) */
     /*==================  Diium(SZDiiER)  ==============================*/
-    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported","auto"},
-    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio",  "auto"},
+    {"dr28s",     "480p",   "none",   "happy5", 270,  "unsupported","auto",    "adc"},
+    {"d007",      "480p",   "dual",   "select", 0,    "dual-gpio",  "auto",    "adc"},
     /*==================  XiFan HandHelds  ============================*/
-    {"mymini",    "480p",   "single", "select", 0,    "gpio",       "auto"},
-    {"mini40",    "720p",   "single", "select", 0,    "gpio",       "auto"},
-    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"rf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"rf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto"},
-    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"xf40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto"},
-    {"xf28",      "480p",   "single", "select", 90,   "ws2812",     "auto"},
-    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"xf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"dc45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"rf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"rf45h",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual"},
-    {"rf55h",     "720p1280","dual",  "happy5", 90,   "ws2812",     "manual"},
+    {"mymini",    "480p",   "single", "select", 0,    "gpio",       "auto",    "gpio"},
+    {"mini40",    "720p",   "single", "select", 0,    "gpio",       "auto",    "gpio"},
+    {"r36max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto",    "adc"},
+    {"r36pro",    "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "adc"},
+    {"xf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto",    "adc"},
+    {"rf35h",     "480p",   "dual",   "select", 0,    "mcu_led",    "auto",    "adc"},
+    {"xf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto",    "adc"},
+    {"rf40h",     "720p",   "dual",   "select", 0,    "mcu_led",    "auto",    "adc"},
+    {"dc35v",     "480p",   "dual",   "happy5", 0,    "ws2812",     "auto",    "adc"},
+    {"dc40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto",    "adc"},
+    {"xf40v",     "720p",   "dual",   "happy5", 0,    "ws2812",     "auto",    "adc"},
+    {"xf28",      "480p",   "single", "select", 90,   "ws2812",     "auto",    "adc"},
+    {"r36max2",   "768p",   "dual",   "happy5", 0,    "ws2812",     "manual",  "adc"},
+    {"xf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual",  "adc"},
+    {"dc45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual",  "adc"},
+    {"rf45v",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual",  "adc"},
+    {"rf45h",     "768p",   "dual",   "happy5", 0,    "ws2812",     "manual",  "adc"},
+    {"rf55h",     "720p1280","dual",  "happy5", 90,   "ws2812",     "manual",  "adc"},
     /*==================  Other  =====================================*/
-    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported","auto"},
-    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio",       "auto"},
-    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported","auto"},
-    {"rg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {"rg36pro",   "480p",   "dual",   "happy5", 0,    "single-gpio","auto"},
-    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto"},
+    {"hg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "adc"},
+    {"rx6h",      "480p",   "dual",   "select", 0,    "unsupported","auto",    "adc"},
+    {"xgb36",     "480p",   "single", "happy5", 0,    "gpio",       "auto",    "gpio"},
+    {"t16max",    "720p",   "dual",   "happy5", 0,    "unsupported","auto",    "adc"},
+    {"u8",        "800p480","dual",   "happy5", 270,  "unsupported","auto",    "adc"},
+    {"rg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {"rg36pro",   "480p",   "dual",   "happy5", 0,    "single-gpio","auto",    "gpio"},
+    {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
     /*==================  fallback  ===================================*/
-    {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto"},
-    {NULL, NULL, NULL, NULL, 0, NULL, NULL}
+    {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
+    {NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL}
 };
 
 /* DTB 到设备名称映射表 */
@@ -513,6 +515,7 @@ int get_device_info(DeviceInfo *info) {
     info->rotation = config->rotation;
     info->led_type = config->led_type;
     info->otg_type = config->otg_type;
+    info->volume_type = config->volume_type;
     
     /* 读取系统版本 */
     read_os_version(info->os_version, sizeof(info->os_version));
@@ -530,6 +533,7 @@ void print_device_info(const DeviceInfo *info) {
     printf("屏幕旋转:     %d 度\n", info->rotation);
     printf("LED类型:      %s\n", info->led_type);
     printf("OTG类型:      %s\n", info->otg_type);
+    printf("音量键类型:   %s\n", info->volume_type);
     printf("系统版本:     %s\n", info->os_version);
     printf("==============================\n");
 }
@@ -545,6 +549,7 @@ void print_device_info_json(const DeviceInfo *info) {
     printf("  \"rotation\": %d,\n", info->rotation);
     printf("  \"led_type\": \"%s\",\n", info->led_type);
     printf("  \"otg_type\": \"%s\",\n", info->otg_type);
+    printf("  \"volume_type\": \"%s\",\n", info->volume_type);
     printf("  \"os_version\": \"%s\"\n", info->os_version);
     printf("}\n");
 }
@@ -559,6 +564,7 @@ void print_device_info_shell(const DeviceInfo *info) {
     printf("SCREEN_ROTATION=%d\n", info->rotation);
     printf("LED_TYPE=%s\n", info->led_type);
     printf("OTG_TYPE=%s\n", info->otg_type);
+    printf("VOLUME_TYPE=%s\n", info->volume_type);
     printf("OS_VERSION=%s\n", info->os_version);
 }
 
@@ -575,6 +581,7 @@ void print_usage(const char *program_name) {
     printf("  -o, --rotation    仅输出屏幕旋转角度\n");
     printf("  -l, --led         仅输出LED类型\n");
     printf("  -O, --otg         仅输出OTG类型\n");
+    printf("  -v, --volume      仅输出音量键类型\n");
     printf("  -b, --bootini     仅输出 boot.ini 检测的设备名称\n");
     printf("  -V, --version     仅输出系统版本\n");
 }
@@ -608,6 +615,8 @@ int main(int argc, char *argv[]) {
             single_output = 6;
         } else if (strcmp(argv[i], "-O") == 0 || strcmp(argv[i], "--otg") == 0) {
             single_output = 8;
+        } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--volume") == 0) {
+            single_output = 10;
         } else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--bootini") == 0) {
             single_output = 7;
         } else if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
@@ -641,6 +650,7 @@ int main(int argc, char *argv[]) {
             case 5: printf("%d\n", info.rotation); break;
             case 6: printf("%s\n", info.led_type); break;
             case 8: printf("%s\n", info.otg_type); break;
+            case 10: printf("%s\n", info.volume_type); break;
             case 9: printf("%s\n", info.os_version); break;
         }
     } else {
