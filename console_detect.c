@@ -97,7 +97,7 @@ static DeviceConfig device_configs[] = {
     {"rgb10max2", "854p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
     {"rgb20s",    "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     /*==================  Clone R36s  ===================================*/
-    /* (clone type 均映射到 r36s，见 dtb_mapping) */
+    {"clone-r36s","480p",   "dual",   "happy5", 0,    "unsupported","auto",     "adc"},
     /*==================  GameConsole  ===================================*/
     {"r46h",       "768p",   "dual",   "select", 0,    "unsupported","auto",    "gpio"},
     {"r40xxpromax","768p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
@@ -194,7 +194,18 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-rgb10max2-linux.dtb",        "rgb10max2"},
     {"rk3326-rgb20s-linux.dtb",           "rgb20s"},
     /*==================  Clone R36s  ===================================*/
-    /* fallback 默认为 "r36s" */
+    {"rk3326-r36s-type1-panel1-invert-linux.dtb",            "clone-r36s"},
+    {"rk3326-r36s-type1-panel1-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type1-panel1-with-amp-linux.dtb",          "clone-r36s"},
+    {"rk3326-r36s-type1-panel2-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type1-panel3-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type1-panel4-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type1-panel5-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type1-panel5-invert-linux.dtb",            "clone-r36s"},
+    {"rk3326-r36s-type1-panel6-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type2-panel1-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type2-panel1-with-amp-linux.dtb",          "clone-r36s"},
+    {"rk3326-r36s-type2-panel2-linux.dtb",                   "clone-r36s"},
     /*==================  GameConsole  ===================================*/
     {"rk3326-r46h-linux.dtb",             "r46h"},
     {"rk3326-r40xxpromax-linux.dtb",      "r40xxpromax"},
