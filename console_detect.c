@@ -204,6 +204,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-r36s-type1-panel5-invert-linux.dtb",            "clone-r36s"},
     {"rk3326-r36s-type1-panel6-linux.dtb",                   "clone-r36s"},
     {"rk3326-r36s-type2-panel1-linux.dtb",                   "clone-r36s"},
+    {"rk3326-r36s-type2-panel1-rk809-linux.dtb",             "clone-r36s"},
     {"rk3326-r36s-type2-panel1-with-amp-linux.dtb",          "clone-r36s"},
     {"rk3326-r36s-type2-panel2-linux.dtb",                   "clone-r36s"},
     /*==================  GameConsole  ===================================*/
