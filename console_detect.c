@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -12,6 +13,7 @@
 #define MAX_DEVICES 64
 #define CONFIG_FILE "/boot/.console"
 #define BOOT_INI_FILE "/boot/boot.ini"
+#define EXTLINUX_CONF_FILE "/boot/extlinux/extlinux.conf"
 #define OS_RELEASE_FILE "/etc/os-release"
 
 /* 屏幕分辨率映射 */
@@ -144,6 +146,14 @@ static DeviceConfig device_configs[] = {
     {"rg36",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     {"rg36pro",   "480p",   "dual",   "happy5", 0,    "single-gpio","auto",    "gpio"},
     {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
+    /*==================  rk3562  ===================================*/
+    {"ais",       "768p",   "dual",   "happy5", 0,     "mcu_led",  "auto",    "adc"},
+    {"ngp45ht",   "768p",   "dual",   "happy5", 0,     "ws2812",   "auto",    "adc"},
+    {"xf55h",     "720p1280","dual",  "happy5", 90,    "mcu_led",  "auto",    "adc"},
+    {"x55h",      "720p1280","dual",  "happy5", 90,    "mcu_led",    "auto",    "adc"},
+    {"rg43h",     "768p",   "dual",   "select", 0,     "mcu_led",  "auto",    "adc"},
+    {"rg43v",     "768p",   "dual",   "select", 0,     "mcu_led",  "auto",    "adc"},
+    {"rg52mini",  "720p1280","dual",  "happy5", 90,    "mcu_led",    "auto",    "adc"},
     /*==================  fallback  ===================================*/
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     {NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL}
@@ -256,6 +266,14 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-rg36-linux.dtb",             "rg36"},
     {"rk3326-rg36pro-linux.dtb",          "rg36pro"},
     {"rk3326-r40s-linux.dtb",             "r40s"},
+    /*==================  3562  =====================================*/
+    {"rk3562-ais.dtb",                    "ais"},
+    {"rk3562-ngp45ht.dtb",                "ngp45ht"},
+    {"rk3562-xf55h.dtb",                  "xf55h"},
+    {"rk3562-rg52mini.dtb",               "rg52mini"},
+    {"rk3562-x55h.dtb",                   "x55h"},
+    {"rk3562-rg43h.dtb",                  "rg43h"},
+    {"rk3562-rg43v.dtb",                  "rg43v"},
     {NULL, NULL}
 };
 
@@ -327,6 +345,58 @@ static const char *find_device_by_dtb(const char *dtb_name) {
     }
     
     return NULL;
+}
+
+/* 从 extlinux/extlinux.conf 读取 FDT 行的 dtb 并获取设备名称 (5.10/rk3562) */
+static int read_extlinux_conf(char *device_name, size_t max_len) {
+    FILE *fp;
+    char line[MAX_LINE_LENGTH];
+
+    fp = fopen(EXTLINUX_CONF_FILE, "r");
+    if (fp == NULL) {
+        return -1;
+    }
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        char *p = line;
+        char *s, *e;
+        char dtb_name[128];
+        const char *dev_name;
+
+        while (*p == ' ' || *p == '\t') p++;
+
+        /* FDT /rk3562-xxx.dtb */
+        if (strncmp(p, "FDT", 3) != 0)
+            continue;
+
+        p += 3;
+        while (*p == ' ' || *p == '\t') p++;
+        /* 去掉前导路径, 取 basename */
+        s = strrchr(p, '/');
+        s = (s != NULL) ? s + 1 : p;
+        e = s;
+        while (*e != '\0' && *e != '\n' && *e != '\r' && *e != ' ' && *e != '\t')
+            e++;
+        fclose(fp);
+        if (e == s)
+            return -1;
+        *e = '\0';
+
+        strncpy(dtb_name, s, sizeof(dtb_name) - 1);
+        dtb_name[sizeof(dtb_name) - 1] = '\0';
+
+        dev_name = find_device_by_dtb(dtb_name);
+        if (dev_name == NULL) {
+            fprintf(stderr, "extlinux.conf 中的 dtb 不在映射表: %s\n", dtb_name);
+            return -1;
+        }
+        strncpy(device_name, dev_name, max_len - 1);
+        device_name[max_len - 1] = '\0';
+        return 0;
+    }
+
+    fclose(fp);
+    return -1;
 }
 
 /* 从 boot.ini 读取 dtb 并获取设备名称 */
@@ -404,13 +474,13 @@ static int read_console_file(char *device_name, size_t max_len) {
     
     fp = fopen(CONFIG_FILE, "r");
     if (fp == NULL) {
-        /* .console 不存在，尝试从 boot.ini 读取 */
-        if (read_boot_ini(device_name, max_len) == 0) {
+        /* .console 不存在: 先 boot.ini (RK3326), 不存在再 extlinux.conf (5.10/rk3562) */
+        if (read_boot_ini(device_name, max_len) == 0 || read_extlinux_conf(device_name, max_len) == 0) {
             /* 写入 .console 文件 */
             write_console_file(device_name);
             return 0;
         }
-        fprintf(stderr, "无法打开配置文件: %s\n", CONFIG_FILE);
+        fprintf(stderr, "无法打开配置文件: %s (boot.ini / extlinux.conf 均不可用)\n", CONFIG_FILE);
         return -1;
     }
     
@@ -575,6 +645,12 @@ void print_device_info_shell(const DeviceInfo *info) {
     printf("HOTKEY_TYPE=%s\n", info->hotkey_type);
     printf("SCREEN_ROTATION=%d\n", info->rotation);
     printf("LED_TYPE=%s\n", info->led_type);
+    {
+        int fan_present = (access("/sys/devices/platform/pwm-fan", F_OK) == 0 ||
+                           system("ls /sys/class/pwm/pwmchip*/pwm0 >/dev/null 2>&1") == 0);
+        printf("FAN=%s\n", fan_present ? "yes" : "no");
+        printf("FAN_NODE=%s\n", fan_present ? "/sys/devices/platform/pwm-fan" : "none");
+    }
     printf("OTG_TYPE=%s\n", info->otg_type);
     printf("VOLUME_TYPE=%s\n", info->volume_type);
     printf("OS_VERSION=%s\n", info->os_version);
@@ -638,11 +714,13 @@ int main(int argc, char *argv[]) {
     
     /* 如果是 -b 选项，直接从 boot.ini 读取 */
     if (single_output == 7) {
-        if (read_boot_ini(bootini_device, sizeof(bootini_device)) == 0) {
+        /* rk3326 走 boot.ini; rk3562 走 extlinux.conf (无 boot.ini) */
+        if (read_boot_ini(bootini_device, sizeof(bootini_device)) == 0 ||
+            read_extlinux_conf(bootini_device, sizeof(bootini_device)) == 0) {
             printf("%s\n", bootini_device);
             return 0;
         } else {
-            fprintf(stderr, "无法从 boot.ini 读取设备信息\n");
+            fprintf(stderr, "无法从 boot.ini/extlinux.conf 读取设备信息\n");
             return 1;
         }
     }
