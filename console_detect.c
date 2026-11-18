@@ -147,13 +147,12 @@ static DeviceConfig device_configs[] = {
     {"rg36pro",   "480p",   "dual",   "happy5", 0,    "single-gpio","auto",    "gpio"},
     {"r40s",      "800p480","dual",   "happy5", 270,  "unsupported","auto",    "gpio"},
     /*==================  rk3562  ===================================*/
-    {"ais",       "768p",   "dual",   "happy5", 0,     "mcu_led",  "auto",    "adc"},
-    {"ngp45ht",   "768p",   "dual",   "happy5", 0,     "ws2812",   "auto",    "adc"},
-    {"xf55h",     "720p1280","dual",  "happy5", 90,    "mcu_led",  "auto",    "adc"},
-    {"x55h",      "720p1280","dual",  "happy5", 90,    "mcu_led",    "auto",    "adc"},
+    {"ais",       "768p",   "dual",   "mode",   0,     "mcu_led",  "auto",    "adc"},
+    {"ngp45ht",   "768p",   "dual",   "mode",   0,     "ws2812",   "auto",    "adc"},
+    {"xf55h",     "720p1280","dual",  "mode",   90,    "mcu_led",  "auto",    "adc"},
     {"rg43h",     "768p",   "dual",   "select", 0,     "mcu_led",  "auto",    "adc"},
-    {"rg43v",     "768p",   "dual",   "select", 0,     "mcu_led",  "auto",    "adc"},
-    {"rg52mini",  "720p1280","dual",  "happy5", 90,    "mcu_led",    "auto",    "adc"},
+    {"rg43v",     "768p",   "dual",   "mode",   0,     "mcu_led",  "auto",    "adc"},
+    {"rg52mini",  "720p1280","dual",  "mode",   90,    "mcu_led",  "auto",    "adc"},
     /*==================  fallback  ===================================*/
     {"r36s",      "480p",   "dual",   "happy5", 0,    "unsupported","auto",    "gpio"},
     {NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL}
@@ -271,7 +270,6 @@ static DtbMap dtb_mapping[] = {
     {"rk3562-ngp45ht.dtb",                "ngp45ht"},
     {"rk3562-xf55h.dtb",                  "xf55h"},
     {"rk3562-rg52mini.dtb",               "rg52mini"},
-    {"rk3562-x55h.dtb",                   "x55h"},
     {"rk3562-rg43h.dtb",                  "rg43h"},
     {"rk3562-rg43v.dtb",                  "rg43v"},
     {NULL, NULL}
