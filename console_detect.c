@@ -203,19 +203,7 @@ static DtbMap dtb_mapping[] = {
     {"rk3326-rgb10max2-linux.dtb",        "rgb10max2"},
     {"rk3326-rgb20s-linux.dtb",           "rgb20s"},
     /*==================  Clone R36s  ===================================*/
-    {"rk3326-r36s-type1-panel1-invert-linux.dtb",            "clone-r36s"},
-    {"rk3326-r36s-type1-panel1-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type1-panel1-with-amp-linux.dtb",          "clone-r36s"},
-    {"rk3326-r36s-type1-panel2-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type1-panel3-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type1-panel4-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type1-panel5-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type1-panel5-invert-linux.dtb",            "clone-r36s"},
-    {"rk3326-r36s-type1-panel6-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type2-panel1-linux.dtb",                   "clone-r36s"},
-    {"rk3326-r36s-type2-panel1-rk809-linux.dtb",             "clone-r36s"},
-    {"rk3326-r36s-type2-panel1-with-amp-linux.dtb",          "clone-r36s"},
-    {"rk3326-r36s-type2-panel2-linux.dtb",                   "clone-r36s"},
+    /* fallback 默认为 "clone-r36s" */
     /*==================  GameConsole  ===================================*/
     {"rk3326-r46h-linux.dtb",             "r46h"},
     {"rk3326-r40xxpromax-linux.dtb",      "r40xxpromax"},
@@ -334,14 +322,19 @@ static DeviceConfig *find_device_config(const char *device_name) {
 /* 从 DTB 映射表中查找设备名称 */
 static const char *find_device_by_dtb(const char *dtb_name) {
     DtbMap *map = dtb_mapping;
-    
+
+    /* Clone R36S: 匹配所有 rk3326-r36s-type* DTB */
+    if (strncmp(dtb_name, "rk3326-r36s-type", 16) == 0) {
+        return "clone-r36s";
+    }
+
     while (map->dtb_name != NULL) {
         if (strcmp(map->dtb_name, dtb_name) == 0) {
             return map->device_name;
         }
         map++;
     }
-    
+
     return NULL;
 }
 
